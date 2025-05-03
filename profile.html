@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Profile Setup</title>
+  <style>
+    body { font-family: Arial; background: #f2f2f2; display: flex; justify-content: center; align-items: center; height: 100vh; }
+    .profile-box { background: white; padding: 30px; border-radius: 10px; width: 350px; text-align: center; box-shadow: 0 0 10px #aaa; }
+    input[type="text"], input[type="file"] { width: 100%; margin: 10px 0; padding: 10px; border-radius: 8px; border: 1px solid #ccc; }
+    img { width: 100px; border-radius: 50%; margin: 10px auto; display: block; }
+    button { background: #28a745; color: white; padding: 10px; width: 100%; border: none; border-radius: 8px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <div class="profile-box">
+    <h2>Complete Your Profile</h2>
+    <img id="preview" src="" alt="Profile Picture" />
+    <input type="file" id="imageInput" accept="image/*" />
+    <input type="text" id="displayName" placeholder="Your Display Name" />
+    <button onclick="saveProfile()">Save Profile & Go to Chat</button>
+  </div>
+
+  <script>
+    const reader = new FileReader();
+    document.getElementById("imageInput").addEventListener("change", function () {
+      const file = this.files[0];
+      reader.onload = function () {
+        document.getElementById("preview").src = reader.result;
+      };
+      reader.readAsDataURL(file);
+    });
+
+    function saveProfile() {
+      const name = document.getElementById('displayName').value.trim();
+      const img = reader.result || '';
+      if (!name || !img) return alert("Please complete your profile");
+
+      const user = localStorage.getItem('currentUser');
+      const profile = { name, img };
+      localStorage.setItem(`profile_${user}`, JSON.stringify(profile));
+      location.href = 'chat.html';
+    }
+  </script>
+</body>
+</html>
